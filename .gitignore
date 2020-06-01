@@ -1,0 +1,6 @@
+# Data Files
+*.csv
+
+# Generated Files
+.DS_Store
+.vscode/*
