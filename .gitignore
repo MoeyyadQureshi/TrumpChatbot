@@ -3,4 +3,5 @@
 
 # Generated Files
 .DS_Store
-.vscode/*
+.vscode/
+__pycache__/
