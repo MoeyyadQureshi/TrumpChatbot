@@ -13,21 +13,24 @@ class MarkovTextChain:
     def train(self, corpus: List[str]) -> None:
         for text in corpus:
             train_seq = ([None] * self.order) + text.split() + ([None] * self.order)
-            cur_state = tuple(train_seq[:self.order])
 
-            for i in range(1, len(train_seq) - self.order):
-                next_state = tuple(train_seq[i:i + self.order]) # TODO: incorrect for order > 1
+            for i in range(len(train_seq) - self.order):
+                cur_state = tuple(train_seq[i:i + self.order])
+                next_state = train_seq[i + self.order]
                 self.state_map[cur_state][next_state] += 1
-
-                cur_state = next_state
         
     def generate(self) -> str:
         seq = list()
-        cur_state = tuple([None] * self.order)
+        next_word = ""
+        cur_state = tuple([None] * self.order) 
 
-        while self.state_map[cur_state].keys():
-            cur_state = choices(list(self.state_map[cur_state].keys()), weights=list(self.state_map[cur_state].values()))[0]
-            seq.append(cur_state[-1])
+        while True:
+            next_word = choices(list(self.state_map[cur_state].keys()), weights=list(self.state_map[cur_state].values()))[0]   
+            if next_word is None:
+                break
+
+            seq.append(next_word)
+            cur_state = cur_state[1:] + (next_word,)
         
         return " ".join(seq)
 
